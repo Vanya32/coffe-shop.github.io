@@ -1,0 +1,1108 @@
+/**
+  Нормализация блочной модели
+ */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+html{
+    font-size: 16px;
+}
+hr{
+    border-color:black;
+    margin: 0;
+    border-bottom-width: 0.1px;
+}
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
+/**
+  Убираем внутренние отступы слева тегам списков,
+  у которых есть атрибут class
+ */
+:where(ul, ol):where([class]) {
+    padding-left: 0;
+}
+
+/**
+  Убираем внешние отступы body и двум другим тегам,
+  у которых есть атрибут class
+ */
+body,
+:where(blockquote, figure, fieldset):where([class]) {
+    margin: 0;
+}
+
+/**
+  Убираем внешние отступы вертикали нужным тегам,
+  у которых есть атрибут class
+ */
+:where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ul,
+  ol,
+  dl
+):where([class]) {
+    margin-block: 0;
+}
+
+:where(dd[class]) {
+    margin-left: 0;
+}
+
+:where(fieldset[class]) {
+    padding: 0;
+    border: none;
+}
+
+/**
+  Убираем стандартный маркер маркированному списку,
+  у которого есть атрибут class
+ */
+:where(ul[class]) {
+    list-style: none;
+}
+
+:where(address[class]) {
+    font-style: normal;
+}
+
+/**
+  Обнуляем вертикальные внешние отступы параграфа,
+  объявляем локальную переменную для внешнего отступа вниз,
+  чтобы избежать взаимодействие с более сложным селектором
+ */
+p {
+    --paragraphMarginBottom: 24px;
+
+    margin-block: 0;
+}
+
+/**
+  Внешний отступ вниз для параграфа без атрибута class,
+  который расположен не последним среди своих соседних элементов
+ */
+p:where(:not([class]):not(:last-child)) {
+    margin-bottom: var(--paragraphMarginBottom);
+}
+
+
+/**
+  Упрощаем работу с изображениями и видео
+ */
+img,
+video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/**
+  Наследуем свойства шрифт для полей ввода
+ */
+input,
+textarea,
+select,
+button {
+    font: inherit;
+}
+
+html {
+    /**
+      Пригодится в большинстве ситуаций
+      (когда, например, нужно будет "прижать" футер к низу сайта)
+     */
+    height: 100%;
+    /**
+      Убираем скачок интерфейса по горизонтали
+      при появлении / исчезновении скроллбара
+     */
+    scrollbar-gutter: stable;
+    /**
+      Плавный скролл
+     */
+    scroll-behavior: smooth;
+}
+
+body {
+    /**
+      Пригодится в большинстве ситуаций
+      (когда, например, нужно будет "прижать" футер к низу сайта)
+     */
+    min-height: 100%;
+    /**
+      Унифицированный интерлиньяж
+     */
+    line-height: 1.5;
+}
+
+/**
+  Нормализация высоты элемента ссылки при его инспектировании в DevTools
+ */
+a:where([class]) {
+    display: inline-flex;
+}
+
+/**
+  Курсор-рука при наведении на элемент
+ */
+button,
+label {
+    cursor: pointer;
+}
+
+/**
+  Убирает серую подсветку при тапе на мобильных устройствах (iOS/Android)
+ */
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/**
+  Приводим к единому цвету svg-элементы
+  (за исключением тех, у которых уже указан
+  атрибут fill со значением 'none' или начинается с 'url')
+ */
+:where([fill]:not(
+  [fill="none"],
+  [fill^="url"]
+)) {
+    fill: currentColor;
+}
+
+/**
+  Приводим к единому цвету svg-элементы
+  (за исключением тех, у которых уже указан
+  атрибут stroke со значением 'none')
+ */
+:where([stroke]:not(
+  [stroke="none"],
+  [stroke^="url"]
+)) {
+    stroke: currentColor;
+}
+
+/**
+  Чиним баг задержки смены цвета при взаимодействии с svg-элементами
+ */
+svg * {
+    transition-property: fill, stroke;
+}
+img, svg {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    display: block;
+}
+
+
+/**
+  Приведение рамок таблиц в классический 'collapse' вид
+ */
+:where(table) {
+    border-collapse: collapse;
+    border-color: currentColor;
+}
+/**
+  Удаляем все анимации и переходы для людей,
+  которые предпочитают их не использовать
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+a{
+    text-decoration: none;
+}
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+@font-face {
+    font-family: 'Space-Mono';
+    src: url("../fonts/SpaceMono-Regular.woff2") format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Anton-Regular';
+    src: url("../fonts/Anton-Regular.woff2") format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+.top-bar{
+    font-family: "Space-Mono";
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:40px;
+    background-color: #1D1D1B;
+    color:#FFF;
+}
+.nav-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+}
+.nav-left{
+    display: flex;
+    align-items: center;
+    gap:40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.nav-left a{
+    position: relative;
+    display: inline-block;
+    font-family: "Space-Mono";
+    font-size: 17px;
+    color: #202020;
+    text-decoration: none;
+    padding-bottom: 1px;
+}
+.nav-left a::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 6px;
+    background: url("../icon/header-under-line.svg") no-repeat center;
+    background-size: contain;
+    opacity: 1;
+}
+.nav-right{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-right  li:nth-child(1){
+    margin-right: 23.39px;
+}
+.nav-right li:nth-child(2){
+    margin-right: 37.3px;
+}
+.nav-right li:nth-child(3){
+    margin-right: 23px;
+}
+.nav-right li:nth-child(4){
+    margin-right: 20px;
+}
+.nav-left li:first-child{
+    margin-left: 40px;
+}
+.nav-right a{
+    position: relative;
+    display: inline-block;
+    font-family: "Space-Mono";
+    font-size: 17px;
+    color: #202020;
+    text-decoration: none;
+    padding-bottom: 1px;
+}
+.nav-right a::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 6px;
+    background: url("../icon/header-under-line.svg") no-repeat center;
+    background-size: contain;
+    opacity: 1;
+}
+.logo img{
+    width: 165px;
+    height: 37px;
+}
+.div-line{
+    border-right: 1px solid black;
+    height: 100px;
+}
+.star-button{
+    width: 55px;
+    height: 58px;
+}
+.footer-line{
+    margin: 0;
+}
+.image-container{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+.enjoy-life-svg{
+    position: absolute;
+    width: 17.7%;
+    height: auto;
+    top:40%;
+    left: 60%;
+}
+.natural-product-svg{
+    position: absolute;
+    width: 7%;
+    height: auto;
+    top: 29%;
+    left: 70%;
+}
+.with-love-svg{
+    position: absolute;
+    width: 24%;
+    left:63%;
+    top:65%;
+}
+.right-arrow{
+    position: absolute;
+    width:4%;
+    top:47%;
+    left:96%;
+}
+.left-arrow{
+    transform: scaleX(-1);
+    position: absolute;
+    width: 4%;
+    top: 47%;
+    right: 96%;
+}
+.footer-wrapper{
+    display: flex;
+    justify-content: center;
+    height:6%;
+}
+.footer-bar-wrapper{
+    display: flex;
+    gap:1.25rem;
+}
+.footer-bar-wrapper  a{
+    font-family: "Space-Mono";
+    font-size: 1rem;
+    color:#202020;
+}
+.wrapper{
+    margin: 0;
+}
+.ul-wrapper{
+    height: 15px;
+    margin: 5px;
+}
+.product-card{
+    background-color: #FDF1D9;
+}
+.grid-container{
+    display: grid;
+    grid-template-columns: 50% 1fr 1fr;
+    align-items: stretch;
+    position: relative;
+}
+.grid-element{
+    position: relative;
+}
+.grid-element.one::after,
+.grid-element.two::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background: black;
+}
+.four{
+    grid-column: -1/1;
+}
+.four img{
+    width: 100%;
+}
+.first{
+    font-family: 'Anton-Regular';
+    font-size: 2.5rem;
+    max-font-size: 50px;
+    text-transform: uppercase;
+    position: relative;
+    left: 3vw;
+    top: 4vw;
+}
+.roasted {
+    display: inline-block;
+    background: url("../icon/section-enjoy-life/roadsted-to.svg") no-repeat center;
+    background-size: contain;
+    padding: 0.2em 1em;
+    line-height: 1;
+}
+.second{
+    font-family: 'Space-Mono';
+    font-size: 1.125rem;
+    position: relative;
+    top: 3vw;
+    left: 3vw;
+}
+.grid-element.one button{
+    font-family: 'Anton-Regular';
+    font-size: 1rem;
+    text-transform: uppercase;
+    display: flex;
+    position: relative;
+    top: 5vw;
+    border: none;
+    background-color: transparent;
+    left: 3vw;
+    padding: 0;
+}
+.grid-element button{
+    border: none;
+    background-color: transparent;
+}
+.grid-element.two  span.name,
+.grid-element.three span.name
+{
+    font-family: 'Anton-Regular';
+    font-size: 1.5625rem;
+    text-transform: uppercase;
+    position: relative;
+    left: 1vw;
+
+}
+.grid-element.two  span.price,
+.grid-element.three span.price {
+    font-family: 'Space-Mono';
+    font-size: 1.125rem;
+    position: relative;
+    left: -1.9vw;
+    bottom: 0.5vw;
+}
+.grid-container-two{
+    display: grid;
+    place-items: center;
+    position: relative;
+    grid-template-columns: 50vw  50vw;
+
+}
+.star-iamges{
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    padding-bottom:28px ;
+}
+.Another-reason-text{
+    display: flex;
+    text-align: center;
+    font-family:"Anton-Regular";
+    text-transform: uppercase;
+    font-size: 2.1875rem;
+}
+.Henri-Monro{
+    font-family: "Space-Mono";
+    display: flex;
+    justify-content: center;
+    padding-top: 52px;
+    font-size: 1.125rem;
+}
+.squre-pagination{
+    display: flex;
+    justify-content: center;
+    gap:30px;
+    margin-top:84px;
+}
+.squre-pagination span{
+    width:8px;
+    height: 8px;
+    border: 1px solid black;
+}
+.squre-pagination span.black-squre{
+    width:8px;
+    height: 8px;
+    background-color: black;
+    border: 1px solid black;
+}
+.grid-elements.twos img{
+    width: auto;
+    height: auto;
+}
+
+.grid-container-three{
+    display: grid;
+    grid-template-columns: 7% 0px 7% 0px 7% 0px 70% 30%;
+    position: relative;
+    align-items: stretch;
+    height: 100vh;
+}
+.grid-elements-text{
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    position: relative;
+    left: 0.5vw;
+    bottom: 5vh;
+    font-family: "Anton-Regular";
+    text-transform: uppercase;
+    font-size:3.125rem;
+}
+.border-left{
+    border-left: 1px solid black;
+    height: 100%;
+}
+.border-bottom{
+    border-bottom: solid black 1px;
+}
+.grid-elements-photo{
+    width: 60%;
+    height: 60%;
+    position: relative;
+    top: 7vw;
+    left: 5vw;
+}
+.grid-elements-textss{
+    position: relative;
+    top: 10vw;
+    right: 18vw;
+}
+.Anton{
+    font-family: Anton-Regular;
+    text-transform: uppercase;
+    font-size: 1.5625rem;
+}
+.Space-mono-regular{
+    font-family: Space-Mono;
+    font-size: 1.125rem;
+}
+.otstup{
+    position: relative;
+    top: 3vh;
+}
+.grid-elements-textss button{
+    font-family: Anton-Regular;
+    font-size:1.0625rem;
+    text-transform: uppercase;
+    color: white;
+    background-color: black;
+    border: none;
+    position: relative;
+    top:5vh;
+    width:155px;
+    height: 59px;
+}
+.grid-elements-textss button:hover{
+    color: black;
+    background-color: white;
+}
+.for-you{
+    font-family: Anton-Regular;
+    font-size: 4.375rem;
+    text-transform: uppercase;
+    position: relative;
+    left: 2vw;
+}
+.grid-container-reserve{
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+.grid-element-reserve{
+    border-left: solid black 1px;
+    border-bottom: solid black 1px;
+}
+.grid-element-reserve img{
+    width: auto;
+}
+.grid-element-reserve button{
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    margin-left: 2vw;
+    margin-bottom: 1vw;
+}
+.grid-element-reserve button p{
+    font-family:Anton-Regular;
+    text-transform: uppercase;
+    font-size: 1.5625rem;
+}
+.grid-element-reserve button span{
+    font-family: Space-Mono;
+    font-size: 1.125rem;
+}
+.grid-container-swing{
+    display: grid;
+    grid-template-columns: 50%  50%;
+    height: 100vh;
+    border-left: 1px solid black;
+    background-color:#FDF1D9;
+}
+.left-side{
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.right-side{
+    display: grid;
+    grid-template-rows: repeat(4,1fr);
+}
+.section{
+    border-bottom: 1px solid black;
+}
+.left-side p{
+    font-family: Anton-Regular;
+    font-size:4.375rem;
+    text-transform: uppercase;
+    position: relative;
+    left: 3vw;
+    top: 2vw;
+}
+.left-side p span.also{
+    letter-spacing: -1vw;
+}
+.left-side p span.food{
+    display: inline-block;
+    width: 200px;
+    height: auto;
+    background-image: url("../icon/section-enjoy-life/roadsted-to.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+.left-side img{
+    position: relative;
+    top: 35vh;
+    left:3vw;
+}
+.section .title{
+    font-family: Anton-Regular;
+    font-size: 2.1875rem;
+    text-transform: uppercase;
+    line-height: 45px;
+    margin-top: 45px;
+    margin-left: 58px;
+
+}
+.section  .subtitle{
+    font-family: Space-Mono;
+    font-size: 1.125rem;
+    line-height:24px;
+    margin-left:60px;
+}
+.section button{
+    font-family:Anton-Regular;
+    font-size: 1rem;
+    text-transform: uppercase;
+    border: none;
+    background-color: transparent;
+    position: relative;
+    bottom: 25%;
+    left: 85%;
+}
+.section button img{
+    position: relative;
+    bottom: 1.7vw;
+    left: 4.5vw;
+}
+.reserve-form{
+    height: 466px;
+    background-image: url("../images/background-enjoy-life.jpg");
+}
+.reserve{
+    display: flex;
+    justify-content: center;
+    font-family:Anton-Regular;
+    font-size:3.125rem;
+    text-transform: uppercase;
+    position: relative;
+    top: 144px;
+}
+.reserve-form::after{
+    background-image: url("../images/background-enjoy-life.jpg");
+}
+.reserve-form form select{
+    border: none;
+    background-color: transparent;
+    border-bottom:solid black 1px;
+    width: 345px;
+    height: 25px
+}
+.reserve-form form{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top:239px;
+    gap: 35px;
+}
+.reserve-form input{
+    border: none;
+    background-color: transparent;
+    font-family:Anton-Regular;
+    font-size: 17px;
+    color: white;
+    background-color: black;
+    text-transform: uppercase;
+    width:164px;
+    height: 59px;
+}
+.reserve-form input:hover{
+    color: black;
+    background-color: white;
+}
+.reserve-form p{
+    position: relative;
+    top: 260px;
+    left: 140px;
+    font-family: Space-Mono;
+    font-size:0.75rem;
+}
+.reserve-form{
+    border-bottom: 1px solid black;
+}
+.grid-top{
+    display: grid;
+    grid-template-rows: 1fr;
+    height: 171px;
+    border-bottom: solid black 1px;
+    align-items: center;
+}
+.grid-top p{
+    font-family:Anton-Regular;
+    font-size:4.375rem;
+    position: relative;
+    left: 50px;
+}
+.grid-bottom{
+    display: grid;
+    grid-template-columns: repeat(6,1fr 1px);
+    align-items: center;
+}
+.team-member{
+    width: 12vw;
+    position: relative;
+    top: 10px;
+    left: 37px;
+}
+.team-member .name{
+    font-family: Anton-Regular;
+    font-size: 1.5625rem;
+    text-transform: uppercase;
+    position: relative;
+    top: 10px;
+}
+.team-member .job{
+    font-family:Space-Mono;
+    font-size:1.125rem;
+    position: relative;
+    top: 5px;
+}
+.vertical-line{
+    width: 1px;
+    background-color: black;
+    height: 400px;
+}
+.grid-container-recent-blog{
+    display:grid;
+    grid-template-columns: 40% 60%;
+}
+.grid-container-right{
+    display: grid;
+    grid-template-rows: repeat(6,1fr);
+}
+.grid-container-left{
+    display: flex;
+    flex-direction: column;
+    gap:645px;
+}
+.grid-container-left{
+    border-right: solid black 1px;
+}
+.grid-container-left p{
+    font-family:Anton-Regular;
+    font-size:4.375rem;
+    text-transform: uppercase;
+    margin-left:60px;
+    margin-top: 52px;
+}
+.grid-container-left span{
+    letter-spacing: -14px;}
+.grid-container-left span::after{
+    content: "";
+    position: relative;
+    right: 50px;
+    bottom: 100px;
+    display: inline-block;
+    position: relative;
+    width: 400px;
+    height: 100px;
+    background: url("../icon/section-enjoy-life/roasted-to.svg") no-repeat;
+    background-size: cover;
+}
+.grid-container-left button{
+    font-family: Anton-Regular;
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    color: white;
+    background-color: black;
+    width: 182px;
+    height: 59px;
+
+}
+.grid-container-left button:hover{
+    color: black;
+    background-color: white;
+}
+.element{
+    display: flex;
+    align-items: center;
+    gap: 44px;
+    margin-left: 58px;
+    margin-top: 48px;
+    position: relative;
+    padding-bottom: 49px;
+}
+.element::after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% + 58px);
+    transform: translateX(-58px);
+    height: 1px;
+    background-color: black;
+}
+.element-content{
+    display: flex;
+    flex-direction: column;
+}
+.element-content p{
+    margin: 0;
+}
+.element-content p:first-child{
+    margin-bottom: 10px;
+}
+.element-content p:last-of-type{
+    margin-bottom: 60px;
+}
+
+.element p{
+    font-family: Anton-Regular;
+    font-size:2.1875rem;
+}
+.element span {
+    font-family: Space-Mono;
+    font-size: 1.125rem;
+}
+.description{
+    text-transform: uppercase;
+}
+.element button{
+    border: none;
+    background-color: transparent;
+    font-family:Anton-Regular;
+    font-size: 1rem;
+    width:120px;
+    height: 25px;
+    text-transform: uppercase;
+}
+.element button::after{
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 20px;
+    background: url("../icon/section-product-card/right-array.svg");
+    background-size: cover;
+}
+.recent-blog{
+    border-bottom: solid black 1px;
+}
+.under-line{
+    position: relative;
+}
+.under-line::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: url("../icon/header-under-line.svg") no-repeat center;
+    display:inline-block;
+    width: 60px;
+    height: 5px;
+    background-size: cover;
+}
+.barista-school-content img{
+    width: 59vw;
+    padding-left:118px;
+    padding-top:137px;
+}
+.barista-school-content{
+    background-color:#C5D6D1;
+    position: relative;
+}
+.barista-school-content p,
+.barista-school-content button{
+    position: relative;
+    left:69vw;
+    bottom: 350px;
+}
+.barista-school-content span{
+    font-family:Anton-Regular;
+    text-transform: uppercase;
+    font-size:2.1875rem;
+}
+.barista-school-content p{
+    font-family: Space-Mono;
+    font-size: 1.125rem;
+}
+.barista-school-content button{
+    border: none;
+    background-color: black;
+    color: white;
+    width:151px;
+    height: 59px;
+    text-transform: uppercase;
+    font-family:Anton-Regular;
+    font-size:1.0625rem;
+}
+.barista-school-content button:hover{
+    color: black;
+    background-color: transparent;
+}
+.barista-school-content{
+    border-bottom: solid black 1px;
+}
+.our-trusted-content p{
+    font-family: Anton-Regular;
+    font-size:4.375rem;
+    text-transform:  uppercase;
+    margin-left: 50px;
+}
+.our-trusted-content{
+    border-bottom: solid black 1px;
+}
+.our-trasted-grid{
+    display: grid;
+    grid-template-columns:  1fr 1px 1fr 1px 1fr 1px 1fr 1px 1fr;
+   justify-items: center;
+    align-items: center;
+}
+.one-trasted img{
+    width:7vw;
+   display: block;
+}
+.right-line{
+    width: 1px;
+    height: 100%;
+    background: black;
+}
+.grid-our-coffe{
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+.left-side-our{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.coffe-name{
+    font-family:Anton-Regular;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+}
+.left-side-our p{
+    font-family:Space-Mono;
+    font-size:1.125rem ;
+}
+.price{
+    margin-left: 23.8vw;
+}
+.follow-us{
+    font-family:Anton-Regular;
+    font-size: 4.375rem;
+    text-transform: uppercase;
+    margin-left:50px;
+}
+
+.image-grid-item{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    row-gap:31px;
+    column-gap: 30px;
+    margin-top:42px;
+    margin-left: 41.7px;
+   }
+.image-grid-item img{
+    width: 18.22vw;
+}
+.border-bottom-image-item{
+    margin-top:50px;
+    border-bottom: black 1px solid;
+}
+.footer-content{
+
+    text-align: start;
+
+}
+.footer-content p{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    top: -80px;
+}
+.footer-content img{
+    width: 5.36vw;
+    margin-left:70px;
+    margin-top: 68px;
+}
+.first-column{
+    position: relative;
+    left: 200px;
+}
+.second-column{
+    position: relative;
+    left: 600px;
+}
+.three-column{
+    position: relative;
+    left: 1000px;
+}
+.first-column{
+    font-family:Space-Mono;
+    font-size: 1rem;
+
+}
+.early{
+    font-family: Anton-Regular;
+    font-size: 1.875rem;
+    text-transform: uppercase;
+}
+.second-column{
+    font-family: Space-Mono;
+    font-size:1.125rem;
+}
+.three-column{
+    font-family: Space-Mono;
+    font-size:1.125rem;
+}
